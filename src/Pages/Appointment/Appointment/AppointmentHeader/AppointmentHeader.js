@@ -3,12 +3,13 @@ import React from 'react';
 import chair from '../../../../images/chair.png';
 import Calender from '../../../Home/Shared/Calender/Calender';
 
-const AppointmentHeader = () => {
+const AppointmentHeader = ({date , setDate}) => {
+   
     return (
         <Container >
-            <Grid container spacing ={2}>
-            <Grid xs={12} md = {6}>
-                    <Calender></Calender>
+            <Grid container spacing ={-5}>
+            <Grid xs={12} md = {6} style={{my:5}}>
+                    <Calender date ={date} setDate={setDate}></Calender>
             </Grid>
 
             <Grid xs={12} md = {6}>
