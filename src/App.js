@@ -5,22 +5,22 @@ import {
   Link
 } from "react-router-dom";
 import './App.css';
+import Appointment from "./Pages/Appointment/Appointment/Appointment";
 import Home from "./Pages/Home/Home";
 
 function App() {
   return (
-    <div className="App">
-      <Home></Home>
+    <div className="App">     
         <Router>
         <Switch>
-          <Route path="/about">
-           
+          <Route to path="/appointment">
+           <Appointment/>
           </Route>
           <Route path="/home">
-           <Home></Home>
+           <Home/>
           </Route>
           <Route path="/">
-           
+          <Home/>
           </Route>
         </Switch>
         </Router>
