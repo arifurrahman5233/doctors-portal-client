@@ -7,6 +7,7 @@ import {
 import './App.css';
 import Appointment from "./Pages/Appointment/Appointment/Appointment";
 import Home from "./Pages/Home/Home";
+import Login from "./Pages/Login/Login/Login";
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
           </Route>
           <Route path="/home">
            <Home/>
+          </Route>
+          <Route path="/login">
+           <Login/>
           </Route>
           <Route path="/">
           <Home/>
