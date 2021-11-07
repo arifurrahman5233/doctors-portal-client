@@ -5,6 +5,7 @@ import {
   Link
 } from "react-router-dom";
 import './App.css';
+import AuthProvider from "./Contexts/AuthProvider/AuthProvider";
 import Appointment from "./Pages/Appointment/Appointment/Appointment";
 import Home from "./Pages/Home/Home";
 import Login from "./Pages/Login/Login/Login";
@@ -13,7 +14,8 @@ import Register from "./Pages/Login/Register/Register";
 function App() {
   return (
     <div className="App">     
-        <Router>
+    <AuthProvider>
+    <Router>
         <Switch>
           <Route to path="/appointment">
            <Appointment/>
@@ -32,6 +34,7 @@ function App() {
           </Route>
         </Switch>
         </Router>
+    </AuthProvider>
     </div>
   );
 }
