@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import initializeFirebase from "../Pages/Login/Login/Fairebase/Firebase.init";
-import { getAuth, createUserWithEmailAndPassword ,signOut,onAuthStateChanged,signInWithEmailAndPassword  } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword ,signOut,onAuthStateChanged,signInWithEmailAndPassword, signInWithPopup ,GoogleAuthProvider , updateProfile  } from "firebase/auth";
 
 
 // initialize firebse app
@@ -13,12 +13,31 @@ const useFirebase = () => {
     const [authError , setAuthError] = useState('');
 
     const auth = getAuth();
-    const registerUser = (email , Password ) => {
+    const googleProvider = new GoogleAuthProvider();
+
+    const registerUser = (email , Password, history,name ) => {
         setIsLoading(true);
+
         createUserWithEmailAndPassword(auth , email, Password)
+
         .then((userCredential) => {
-            const user = userCredential.user;
-          setAuthError('');
+
+    const user = userCredential.user;
+    
+    const newUser = {email , displayName : name};
+
+          setUser(newUser);
+
+// send name to firebase after creation
+
+          updateProfile(auth.currentUser, {
+            displayName: name
+          }).then(() => {
+            
+          }).catch((error) => {
+           
+          });
+          history.replace('/');
         
           })
           .catch((error) => {
@@ -30,19 +49,20 @@ const useFirebase = () => {
           
     }
     
+
+    // login user
+
+
     const loginUser = (email, Password , location , history) => {
       setIsLoading(true);
+
       signInWithEmailAndPassword (auth , email, Password)
-        .then((userCredential) => {
+      .then((userCredential) => {
           
-
-          const destination =  location?.state?.from || '/';
-
+    const destination =  location?.state?.from || '/';
           history.replace(destination);
-          setAuthError('');
+          setAuthError('');           
 
-            
-        
           })
           .catch((error) => {
           
@@ -55,6 +75,24 @@ const useFirebase = () => {
 
     // observer user state
 
+    const signInwithGoogle = ( location , history) => {
+      setIsLoading(true);
+
+      signInWithPopup(auth, googleProvider)
+      .then((result) => {
+
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+   
+    const user = result.user;
+      setAuthError('');
+
+    
+  }).catch((error) => {
+    setAuthError(error.message);
+    
+  }).finally(() => setIsLoading(false));
+
+    }
 
    useEffect(()=>{
  const unsubscribe=   onAuthStateChanged(auth, (user) => {
@@ -82,6 +120,7 @@ const useFirebase = () => {
         isLoading,
         authError,
         registerUser,
+        signInwithGoogle,
         logOut,
         loginUser,
     }

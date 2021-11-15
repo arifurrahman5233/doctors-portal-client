@@ -7,7 +7,7 @@ import login from '../../../images/login.png';
 const Login = () => {
 
     const [loginData , setLoginData ] = useState({})
-    const {user , loginUser , isLoading , authError} =useAuth();
+    const {user , loginUser ,signInwithGoogle, isLoading , authError } =useAuth();
 
     const location = useLocation();
     const history = useHistory();
@@ -28,6 +28,10 @@ const Login = () => {
         e.preventDefault();
     }
 
+    const handleGoogleSignIn = () => {
+        signInwithGoogle(location, history)
+    }
+
     return (
         <Container>
             <Grid container spacing={2}>
@@ -40,7 +44,7 @@ const Login = () => {
                      id="standard-basic"
                      label="Your Email"
                      name= "email"
-                     onChange={handleOnChange}
+                     onBlur={handleOnChange}
                      variant="standard" 
                      />
                     <TextField
@@ -48,7 +52,7 @@ const Login = () => {
                      id="standard-basic" 
                      label="Your Password"
                      name="password"
-                     onChange={handleOnChange}
+                     onBlur={handleOnChange}
                      type="password"
                      variant="standard"
                       
@@ -75,6 +79,11 @@ const Login = () => {
 
                 }
                     </form>
+
+
+                    <p>----------------------------</p>
+
+                    <Button onClick={handleGoogleSignIn} variant="contained">Google Sign In</Button>
 
 
                 </Grid>
