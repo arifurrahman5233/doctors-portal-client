@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
@@ -26,18 +26,43 @@ const BookingModal = ({openBooking,handleBookingClose, booking ,date}) => {
     const {name, time}=booking;
     const {user } = useAuth();
 
-const handleBookingSubmit = e => {
+const initialInfo ={patientName : user.displayName , email: user.email , phone: ''}
+const [bookingInfo , setBookingInfo] = useState(initialInfo);
 
-  alert ("submitting");
-  handleBookingClose();
-  e.preventDefault();
-
-// collect data
-// send to the server
-  
-  handleBookingClose();
-  e.preventDefault();
+const handleOnBlur = e => {
+    const field = e.target.name;
+    const value = e.target.value;
+    const newInfo = {...bookingInfo};
+    newInfo[field]= value;
+    setBookingInfo(newInfo);
 }
+
+const handleBookingSubmit = e => {
+  //collect data
+const appointment ={
+  ...bookingInfo,
+  time,
+  serviceName : name,
+  date: date.toLocaleDateString()
+}
+
+  // send to server
+  fetch('http://localhost:5000/appointments', {
+    method: 'POST',
+    headers: {
+      'content-type' : 'application/json'
+    },
+    body: JSON.stringify(appointment)
+  })
+  .then(res =>res.json())
+  .then(data => {
+    console.log(data)
+  })
+  handleBookingClose();
+  e.preventDefault();
+
+}
+
     return (
         <Modal
         open={openBooking}
@@ -62,6 +87,8 @@ const handleBookingSubmit = e => {
                 
                 sx = {{width:'98%' , m:1}}
                 id="outlined-size-small"
+                name="PatientName"
+                onBlur ={handleOnBlur}
                 defaultValue={user.displayName}
                 size="small"
               />
@@ -69,6 +96,8 @@ const handleBookingSubmit = e => {
                 
                 sx = {{width:'98%' , m:1}}
                 id="outlined-size-small"
+                name="email"
+                onBlur ={handleOnBlur}
                 defaultValue={user.email}
                 size="small"
               />
@@ -76,6 +105,8 @@ const handleBookingSubmit = e => {
                 
                 sx = {{width:'98%' , m:1}}
                 id="outlined-size-small"
+                name="phone"
+                onBlur ={handleOnBlur}
                 defaultValue="Your Phone Number"
                 size="small"
               />
