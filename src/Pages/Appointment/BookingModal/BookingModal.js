@@ -21,12 +21,13 @@ const style = {
 
 
 
-const BookingModal = ({openBooking,handleBookingClose, booking ,date}) => {
+const BookingModal = ({openBooking,handleBookingClose, booking ,date, setBookingSuccess}) => {
 
     const {name, time}=booking;
     const {user } = useAuth();
 
 const initialInfo ={patientName : user.displayName , email: user.email , phone: ''}
+
 const [bookingInfo , setBookingInfo] = useState(initialInfo);
 
 const handleOnBlur = e => {
@@ -56,9 +57,14 @@ const appointment ={
   })
   .then(res =>res.json())
   .then(data => {
-    console.log(data)
-  })
-  handleBookingClose();
+    if (data.insertedId){
+      setBookingSuccess(true);
+      handleBookingClose();
+
+
+    }
+  });
+ 
   e.preventDefault();
 
 }
